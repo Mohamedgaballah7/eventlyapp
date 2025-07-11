@@ -14,3 +14,4 @@ class AppLanguagesProvider extends ChangeNotifier{
     return appLanguage=='en';
   }
 }
+

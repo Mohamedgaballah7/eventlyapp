@@ -21,10 +21,11 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
   Widget build(BuildContext context) {
     return IntroductionScreen(
       onDone: () {
-        Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
+        Navigator.of(context).pushReplacementNamed(AppRoutes.loginRouteName);
       },
       showSkipButton: true,
       skip: Container(
+
           alignment: Alignment.bottomRight,
           child:  Text(AppLocalizations.of(context)!.skip, style:  AppStyles.bold20Primary,)),
       next: const Icon(Icons.arrow_circle_right, color: AppColors.primaryLight,size: 30,),
@@ -42,11 +43,6 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
       curve: Curves.easeInOut,
       key: _introKey,
       pages: [
-        PageViewModel(
-          titleWidget: Image.asset('assets/images/evently_logo.png'),
-            bodyWidget: OnboardingScreenCustom(onboarding:
-            Onboarding(image: '1', title: AppLocalizations.of(context)!.onboardingtitle1, content: AppLocalizations.of(context)!.onboardingcontent1) ,slider: true,slider2: true,)
-        ),
         PageViewModel(
             titleWidget: Image.asset('assets/images/evently_logo.png'),
             bodyWidget: OnboardingScreenCustom(onboarding:

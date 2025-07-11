@@ -9,6 +9,66 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get login => 'تسجيل الدخول';
+
+  @override
+  String get email => 'البريد الإلكتروني';
+
+  @override
+  String get password => 'كلمة المرور';
+
+  @override
+  String get re_password => 'تأكيد كلمة المرور';
+
+  @override
+  String get name => 'الاسم';
+
+  @override
+  String get register => 'تسجيل';
+
+  @override
+  String get create_account => 'إنشاء حساب';
+
+  @override
+  String get forget_password => 'هل نسيت كلمة المرور؟';
+
+  @override
+  String get forgot_password => 'نسيت كلمة المرور';
+
+  @override
+  String get reset_password => 'إعادة تعيين كلمة المرور';
+
+  @override
+  String get please_enter_password => 'يرجى إدخال 6 أحرف على الأقل';
+
+  @override
+  String get please_valid_password => 'يرجى إدخال كلمة مرور صحيحة';
+
+  @override
+  String get please_enter_email => 'يرجى إدخال البريد الإلكتروني';
+
+  @override
+  String get please_valid_email => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get please_enter_name => 'يرجى إدخال الاسم';
+
+  @override
+  String get already_have_account => 'هل لديك حساب بالفعل؟';
+
+  @override
+  String get dont_have_account => 'ليس لديك حساب؟';
+
+  @override
+  String get or => 'أو';
+
+  @override
+  String get login_with_google => 'تسجيل الدخول باستخدام جوجل';
+
+  @override
+  String get search_for_event => 'البحث عن الحدث';
+
+  @override
   String get language => 'اللغه';
 
   @override
@@ -36,6 +96,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get logout => 'خروج';
 
   @override
+  String get let_start => 'هيا نبدأ';
+
+  @override
   String get home => 'المنزل';
 
   @override
@@ -46,6 +109,78 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profile => 'الحساب';
+
+  @override
+  String get all => 'الكل';
+
+  @override
+  String get sport => 'رياضة';
+
+  @override
+  String get birthday => 'عيد ميلاد';
+
+  @override
+  String get meeting => 'اجتماع';
+
+  @override
+  String get gaming => 'ألعاب';
+
+  @override
+  String get workshop => 'ورشة عمل';
+
+  @override
+  String get bookclub => 'نادي كتاب';
+
+  @override
+  String get exhibition => 'معرض';
+
+  @override
+  String get holiday => 'عطلة';
+
+  @override
+  String get eating => 'تناول الطعام';
+
+  @override
+  String get create_event => 'إنشاء حدث';
+
+  @override
+  String get title => 'العنوان';
+
+  @override
+  String get event_title => 'عنوان الحدث';
+
+  @override
+  String get description => 'الوصف';
+
+  @override
+  String get event_description => 'وصف الحدث';
+
+  @override
+  String get please_enter_title => 'يرجى إدخال عنوان الحدث';
+
+  @override
+  String get please_enter_description => 'يرجى إدخال وصف الحدث';
+
+  @override
+  String get event_date => 'تاريخ الحدث';
+
+  @override
+  String get event_time => 'وقت الحدث';
+
+  @override
+  String get choose_date => 'اختر التاريخ';
+
+  @override
+  String get choose_time => 'اختر الوقت';
+
+  @override
+  String get location => 'موقع';
+
+  @override
+  String get choose_event_location => 'اختر موقع الحدث';
+
+  @override
+  String get add_event => 'أضف الحدث';
 
   @override
   String get onboardingtitle1 => 'خصّص تجربتك';

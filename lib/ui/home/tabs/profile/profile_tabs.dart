@@ -2,6 +2,7 @@
 import 'package:eventlyapproute/providers/app_theme_provider.dart';
 import 'package:eventlyapproute/ui/home/tabs/profile/language/languages_bottom_sheet.dart';
 import 'package:eventlyapproute/ui/home/tabs/profile/theme/theme_bottom_sheet.dart';
+import 'package:eventlyapproute/ui/widgets/custom_elavated_button.dart';
 import 'package:eventlyapproute/utils/app_assets.dart';
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
@@ -10,6 +11,7 @@ import 'package:eventlyapproute/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/app_languages_provider.dart';
+import '../../../../utils/app_routes.dart';
 class ProfileTabs extends StatefulWidget{
   const ProfileTabs({super.key});
 
@@ -104,19 +106,16 @@ class _ProfileTabsState extends State<ProfileTabs> {
               ),
             ),
             Spacer(),
-            ElevatedButton(onPressed: (){},
-
-                style:ElevatedButton.styleFrom(backgroundColor: AppColors.redColor,
-                    padding: EdgeInsets.symmetric(vertical: height*0.02,horizontal: width*0.04),
-                    shape:RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(width*0.03)) ) ,
-                child: Row(
-                  children: [
-                    Icon(Icons.logout_outlined,color: AppColors.whiteColor,size: 25,),
-                    SizedBox(width: width*0.02,),
-                    Text(AppLocalizations.of(context)!.logout,style: AppStyles.bold16White,),
-                  ],
-                )
-            ),
+            CustomElavatedButton(onPressed: (){
+              Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.loginRouteName, (route) => false,);
+            },
+                textName: AppLocalizations.of(context)!.logout,
+              backgroundColor: AppColors.redColor,
+              isIcon: true,
+              mainAxisAlignment: MainAxisAlignment.start,
+              iconName: Image.asset(AppAssets.iconLogout),
+              borderColor: AppColors.transparentColor,
+            )
           ],
         ),
       ),
