@@ -98,6 +98,126 @@ abstract class AppLocalizations {
     Locale('en'),
   ];
 
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @re_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Re password'**
+  String get re_password;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @create_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get create_account;
+
+  /// No description provided for @forget_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget Password?'**
+  String get forget_password;
+
+  /// No description provided for @forgot_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget Password'**
+  String get forgot_password;
+
+  /// No description provided for @reset_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get reset_password;
+
+  /// No description provided for @please_enter_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter at least 6 Characters '**
+  String get please_enter_password;
+
+  /// No description provided for @please_valid_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Valid Password'**
+  String get please_valid_password;
+
+  /// No description provided for @please_enter_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Email'**
+  String get please_enter_email;
+
+  /// No description provided for @please_valid_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Valid Email'**
+  String get please_valid_email;
+
+  /// No description provided for @please_enter_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Name'**
+  String get please_enter_name;
+
+  /// No description provided for @already_have_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Already Have Account ?'**
+  String get already_have_account;
+
+  /// No description provided for @dont_have_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t Have Account ?'**
+  String get dont_have_account;
+
+  /// No description provided for @or.
+  ///
+  /// In en, this message translates to:
+  /// **'Or'**
+  String get or;
+
+  /// No description provided for @login_with_google.
+  ///
+  /// In en, this message translates to:
+  /// **'Login With Google'**
+  String get login_with_google;
+
+  /// No description provided for @search_for_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Search For Event'**
+  String get search_for_event;
+
   /// No description provided for @language.
   ///
   /// In en, this message translates to:
@@ -152,6 +272,12 @@ abstract class AppLocalizations {
   /// **'Logout'**
   String get logout;
 
+  /// No description provided for @let_start.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s start'**
+  String get let_start;
+
   /// No description provided for @home.
   ///
   /// In en, this message translates to:
@@ -175,6 +301,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile'**
   String get profile;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @sport.
+  ///
+  /// In en, this message translates to:
+  /// **'Sport'**
+  String get sport;
+
+  /// No description provided for @birthday.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthday'**
+  String get birthday;
+
+  /// No description provided for @meeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting'**
+  String get meeting;
+
+  /// No description provided for @gaming.
+  ///
+  /// In en, this message translates to:
+  /// **'Gaming'**
+  String get gaming;
+
+  /// No description provided for @workshop.
+  ///
+  /// In en, this message translates to:
+  /// **'Workshop'**
+  String get workshop;
+
+  /// No description provided for @bookclub.
+  ///
+  /// In en, this message translates to:
+  /// **'Book club'**
+  String get bookclub;
+
+  /// No description provided for @exhibition.
+  ///
+  /// In en, this message translates to:
+  /// **'Exhibition'**
+  String get exhibition;
+
+  /// No description provided for @holiday.
+  ///
+  /// In en, this message translates to:
+  /// **'Holiday'**
+  String get holiday;
+
+  /// No description provided for @eating.
+  ///
+  /// In en, this message translates to:
+  /// **'Eating'**
+  String get eating;
+
+  /// No description provided for @create_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Event'**
+  String get create_event;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @event_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Title'**
+  String get event_title;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @event_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Description'**
+  String get event_description;
+
+  /// No description provided for @please_enter_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Event Title'**
+  String get please_enter_title;
+
+  /// No description provided for @please_enter_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Event Description'**
+  String get please_enter_description;
+
+  /// No description provided for @event_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Date'**
+  String get event_date;
+
+  /// No description provided for @event_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Time'**
+  String get event_time;
+
+  /// No description provided for @choose_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Date'**
+  String get choose_date;
+
+  /// No description provided for @choose_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Time'**
+  String get choose_time;
+
+  /// No description provided for @location.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get location;
+
+  /// No description provided for @choose_event_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Event Location'**
+  String get choose_event_location;
+
+  /// No description provided for @add_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Event'**
+  String get add_event;
 
   /// No description provided for @onboardingtitle1.
   ///
