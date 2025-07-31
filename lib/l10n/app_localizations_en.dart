@@ -162,6 +162,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get please_enter_description => 'Please Enter Event Description';
 
   @override
+  String get please_enter_date => 'Please Enter Event Date';
+
+  @override
+  String get please_enter_time => 'Please Enter Event Time';
+
+  @override
   String get event_date => 'Event Date';
 
   @override
@@ -181,6 +187,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get add_event => 'Add Event';
+
+  @override
+  String get edit_event => 'Edit Event';
+
+  @override
+  String get update_event => 'Update Event';
+
+  @override
+  String get no_event => 'No Event Found';
+
+  @override
+  String get event_added_successfully => 'Event Added Successfully';
+
+  @override
+  String get successfully => 'Successfully Connection';
+
+  @override
+  String get loading => 'Loading...';
+
+  @override
+  String get connection_failed => 'Connection Failed';
+
+  @override
+  String get ok => 'Ok';
+
+  @override
+  String get favourite_update => 'Favourite Update Successfully';
 
   @override
   String get onboardingtitle1 => 'Personalize your experience';

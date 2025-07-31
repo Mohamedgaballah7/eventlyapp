@@ -75,7 +75,7 @@ List<Widget>tabs=[
 
   BottomNavigationBarItem builtBottomNavigationBarItem({required int index,required String selectedIconName,required String unSelectedIconName,required String label}){
     return BottomNavigationBarItem(
-        icon: ImageIcon(AssetImage(selectedIndex==index?selectedIconName:unSelectedIconName),size: width*0.06,),
+        icon: ImageIcon(AssetImage(selectedIndex==index?selectedIconName:unSelectedIconName),size: width*0.055,),
         label: label,
     );
   }

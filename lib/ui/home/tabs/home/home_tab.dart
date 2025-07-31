@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventlyapproute/l10n/app_localizations.dart';
 import 'package:eventlyapproute/ui/home/tabs/home/widgets/events_items.dart';
 import 'package:eventlyapproute/ui/home/tabs/home/widgets/events_items_container.dart';
 import 'package:eventlyapproute/utils/app_assets.dart';
+import 'package:eventlyapproute/utils/app_routes.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../../providers/user_provider.dart';
+import '../../../../utils/firebase_utils.dart';
+import '../../../../models/event.dart';
+import '../../../../providers/event_list_provider.dart';
 import '../../../../utils/app_colors.dart';
 class HomeTab extends StatefulWidget {
    HomeTab({super.key});
@@ -13,24 +20,18 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  int selectedIndex=0;
 
   @override
   Widget build(BuildContext context) {
     var height=MediaQuery.of(context).size.height;
     var width=MediaQuery.of(context).size.width;
-    List<String>eventsNameList=[
-      AppLocalizations.of(context)!.all,
-      AppLocalizations.of(context)!.sport,
-      AppLocalizations.of(context)!.birthday,
-      AppLocalizations.of(context)!.meeting,
-      AppLocalizations.of(context)!.gaming,
-      AppLocalizations.of(context)!.workshop,
-      AppLocalizations.of(context)!.bookclub,
-      AppLocalizations.of(context)!.exhibition,
-      AppLocalizations.of(context)!.holiday,
-      AppLocalizations.of(context)!.eating,
-    ];
+    var eventListProvider=Provider.of<EventListProvider>(context);
+    var userProvider=Provider.of<UserProvider>(context);
+    eventListProvider.getEventsNameList(context);
+    if(eventListProvider.eventList.isEmpty) {
+      eventListProvider.getAllEvents(userProvider.currentUser!.id);
+    }
+
     return Scaffold(
       appBar: AppBar(
             shape: RoundedRectangleBorder(
@@ -46,7 +47,8 @@ class _HomeTabState extends State<HomeTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
               Text('welcome back',style: AppStyles.normal16White,),
-              Text('mohamed samy',style: AppStyles.bold20White,)
+              Text(userProvider.currentUser!.name,
+                style: AppStyles.bold20White,)
             ],),
             Spacer(),
             IconButton(onPressed: (){}, icon: Icon(Icons.brightness_low_sharp,color: AppColors.whiteColor,)),
@@ -78,7 +80,7 @@ class _HomeTabState extends State<HomeTab> {
                 ],
               ),
               SizedBox(height: height*0.01,),
-              DefaultTabController(length: eventsNameList.length,
+              DefaultTabController(length: eventListProvider.eventsNameList.length,
                   child: TabBar(
                     isScrollable: true,
                       tabAlignment: TabAlignment.start,
@@ -86,12 +88,9 @@ class _HomeTabState extends State<HomeTab> {
                       labelPadding: EdgeInsets.zero,
                       indicatorColor: AppColors.transparentColor,
                       onTap: (index) {
-                        selectedIndex=index;
-                        setState(() {
-                          
-                        });
+                        eventListProvider.changeToSelectedIndex(index,userProvider.currentUser!.id);
                       },
-                      tabs: eventsNameList.map((eventName) {
+                      tabs: eventListProvider.eventsNameList.map((eventName) {
                         return EventsItems(
                           selectedBorderColor: AppColors.transparentColor,
                             unSelectedBorderColor: Theme.of(context).focusColor,
@@ -99,7 +98,7 @@ class _HomeTabState extends State<HomeTab> {
                             unSelectedBackGroundColor: AppColors.transparentColor,
                             selectedTextStyle: Theme.of(context).textTheme.headlineMedium,
                             unSelectedTextStyle: Theme.of(context).textTheme.headlineSmall,
-                            isSelected: selectedIndex==eventsNameList.indexOf(eventName),
+                            isSelected: eventListProvider.selectedIndex==eventListProvider.eventsNameList.indexOf(eventName),
                             eventName: eventName);
                       },).toList()
                   ))
@@ -109,16 +108,23 @@ class _HomeTabState extends State<HomeTab> {
       ),
       body: Column(
         children: [
+
           Expanded(
-            child: ListView.separated(
+            child: eventListProvider.filterEventList.isEmpty?
+            Center(child: Text(AppLocalizations.of(context)!.no_event,style: AppStyles.bold20Primary,)):
+            ListView.separated(
               padding: EdgeInsets.only(top: height*0.02),
                 itemBuilder: (context, index) {
-              return EventsItemsContainer();
+              return InkWell(
+                onTap: (){
+                  Navigator.of(context).pushNamed(AppRoutes.editEventRouteName);
+                },
+                  child: EventsItemsContainer(event: eventListProvider.filterEventList[index],));
             },
                 separatorBuilder: (context, index) {
                   return SizedBox(height: height*0.01,);
                 },
-                itemCount: eventsNameList.length),
+                itemCount: eventListProvider.filterEventList.length),
           ),
         ],
       ),

@@ -1,14 +1,19 @@
+import 'package:eventlyapproute/providers/user_provider.dart';
+import 'package:eventlyapproute/utils/firebase_utils.dart';
+import 'package:eventlyapproute/models/event.dart';
 import 'package:eventlyapproute/ui/home/add_event/event_lists/event_lists.dart';
 import 'package:eventlyapproute/ui/home/tabs/home/widgets/events_items.dart';
 import 'package:eventlyapproute/ui/widgets/custom_elavated_button.dart';
 import 'package:eventlyapproute/ui/widgets/custom_text_form_field.dart';
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
+import 'package:eventlyapproute/utils/snack_bar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../../providers/app_theme_provider.dart';
+import '../../../providers/event_list_provider.dart';
 
 class AddEventScreen extends StatefulWidget {
    AddEventScreen({super.key});
@@ -24,6 +29,12 @@ TextEditingController descriptionEditingController=TextEditingController();
 final formKey=GlobalKey<FormState>();
 DateTime? selectedDate;
 TimeOfDay? selectedTime;
+String formatedTime='';
+bool visibleDate=false;
+bool visibleTime=false;
+String selectedImage='';
+String selectedEventName='';
+late EventListProvider eventListProvider;
   @override
   Widget build(BuildContext context) {
     List<String>eventsNameList=[
@@ -37,6 +48,8 @@ TimeOfDay? selectedTime;
       AppLocalizations.of(context)!.holiday,
       AppLocalizations.of(context)!.eating,
     ];
+    selectedImage=EventList.eventsImageList[selectedIndex];
+    selectedEventName=eventsNameList[selectedIndex];
     var height = MediaQuery
         .of(context)
         .size
@@ -46,6 +59,7 @@ TimeOfDay? selectedTime;
         .size
         .width;
     var themeProvider=Provider.of<AppThemeProvider>(context);
+    eventListProvider=Provider.of<EventListProvider>(context);
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
@@ -139,9 +153,16 @@ TimeOfDay? selectedTime;
                       sizeBox: width*0.02,
                       text: AppLocalizations.of(context)!.event_date,
                       textButton:selectedDate==null?AppLocalizations.of(context)!.choose_date:
-                          '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
+                      '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}',
                     onPressed: setDate,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                    Visibility(
+                        visible: visibleDate,
+                        child: Text(AppLocalizations.of(context)!.please_enter_date,style: AppStyles.medium14Primary.copyWith(color: AppColors.redColor),)),
+                  ],),
                   builtEventDateAndTime(
                       icon: Icon(Icons.access_time_outlined,
                         color: themeProvider.isDarkMode()?
@@ -150,9 +171,17 @@ TimeOfDay? selectedTime;
                       sizeBox: width*0.02,
                       text: AppLocalizations.of(context)!.event_time,
                       textButton:selectedTime==null? AppLocalizations.of(context)!.choose_time:
-                    selectedTime!.format(context),
+                      formatedTime,
                     onPressed: setTime,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Visibility(
+                          visible: visibleTime,
+                          child: Text(AppLocalizations.of(context)!.please_enter_time,style: AppStyles.medium14Primary.copyWith(color: AppColors.redColor),)),
+                    ],),
+
                   Text(AppLocalizations.of(context)!.location,style: Theme.of(context).textTheme.labelSmall,),
                   Container(
                     margin:  EdgeInsets.symmetric(horizontal: width*0.025,vertical: height*0.01),
@@ -211,13 +240,88 @@ TimeOfDay? selectedTime;
         SizedBox(width: sizeBox,),
         Text(text,style: Theme.of(context).textTheme.labelSmall,),
         Spacer(),
-        TextButton(onPressed:onPressed,
-          child:  Text(textButton,style: AppStyles.bold16Primary,),)
+        Column(
+          children: [
+            TextButton(onPressed:onPressed,
+              child:  Text(textButton,style: AppStyles.bold16Primary,),),
+
+          ],
+        )
       ],
     );
   }
   void addEventCheck(){
-    if(formKey.currentState!.validate()){}
+    if(formKey.currentState!.validate()&&selectedDate!=null&&selectedTime!=null){
+      visibleDate=false;
+      visibleTime=false;
+      setState(() {
+
+      });
+      Event event=Event(
+          image: selectedImage,
+          eventName: selectedEventName,
+          title: titleEditingController.text,
+          description: descriptionEditingController.text,
+          dateTime: selectedDate!,
+          time: formatedTime,
+      );
+      var userProvider=Provider.of<UserProvider>(context,listen: false);
+      FirebaseUtils.addEventToFireStore(event,userProvider.currentUser!.id)
+          .then((value) {
+        snackBarMessage(
+            context,
+            text: AppLocalizations.of(context)!.event_added_successfully,
+            color: AppColors.greenColor);
+        titleEditingController.clear();
+        descriptionEditingController.clear();
+        selectedDate = null;
+        selectedTime = null;
+        eventListProvider.getAllEvents(userProvider.currentUser!.id);
+        Navigator.of(context).pop();
+        setState(() {});
+
+      },);
+      //todo:used timeout when network is disable => (offline)
+      //     .timeout(
+      //   const Duration(milliseconds: 500),
+      //   onTimeout: () {
+      //     snackBarMessage(
+      //       context,
+      //         text: AppLocalizations.of(context)!.event_added_successfully,
+      //         color: AppColors.greenColor);
+      //     titleEditingController.clear();
+      //     descriptionEditingController.clear();
+      //     selectedDate = null;
+      //     selectedTime = null;
+      //     eventListProvider.getAllEvents(userProvider.currentUser!.id);
+      //     Navigator.of(context).pop();
+      //     setState(() {});
+      //   },
+      // );
+    }
+    else if(selectedDate==null){
+      visibleDate=true;
+      setState(() {
+
+      });
+    }else{
+      visibleDate=false;
+      setState(() {
+
+      });
+    }
+     if(selectedTime==null){
+      visibleTime=true;
+      setState(() {
+
+      });
+    }else{
+       visibleTime=false;
+       setState(() {
+
+       });
+     }
+
   }
   void setDate()async{
     var chooseDate=await showDatePicker(
@@ -237,8 +341,10 @@ void setTime()async{
       initialTime: TimeOfDay.now()
   );
   selectedTime=chooseTime;
+  formatedTime=selectedTime!.format(context);
   setState(() {
 
   });
 }
+
 }

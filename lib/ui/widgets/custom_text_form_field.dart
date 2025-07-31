@@ -75,7 +75,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         controller: controller,
         validator: validator,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+
         keyboardType: keyboardType,
         obscuringCharacter: obscuringCharacter,
         maxLines: maxLines??1,

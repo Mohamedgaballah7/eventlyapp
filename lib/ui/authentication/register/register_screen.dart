@@ -3,13 +3,17 @@ import 'package:eventlyapproute/ui/widgets/custom_elavated_button.dart';
 import 'package:eventlyapproute/ui/widgets/custom_text_form_field.dart';
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
+import 'package:eventlyapproute/utils/dialog_message.dart';
+import 'package:eventlyapproute/utils/firebase_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../../../models/user.dart';
+import '../../../providers/event_list_provider.dart';
+import '../../../providers/user_provider.dart';
 import '../../../utils/app_assets.dart';
 import '../../../utils/app_routes.dart';
 import '../../widgets/switch_toogle_language.dart';
-
-
 class RegisterScreen extends StatefulWidget {
   RegisterScreen({super.key});
 
@@ -18,13 +22,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  TextEditingController nameEditingController = TextEditingController();
+  TextEditingController nameEditingController = TextEditingController(text: 'mohamedgaballah');
 
-  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController emailEditingController = TextEditingController(text: 'modys1106@gmaiil.com');
 
-  TextEditingController passwordEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController(text: '425579');
 
-  TextEditingController rePasswordEditingController = TextEditingController();
+  TextEditingController rePasswordEditingController = TextEditingController(text: '425579');
 
   final formKey = GlobalKey<FormState>();
   bool obscureTextPassword = true;
@@ -210,10 +214,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  void createAccountCheck() {
+  void createAccountCheck()async{
     if (formKey.currentState!.validate() == true) {
-      Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.homeRouteName,(route) => false,);
+      DialogMessage.showLoadingMessage(context: context, text: AppLocalizations.of(context)!.loading);
+      try {
+        final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailEditingController.text,
+          password: passwordEditingController.text,
+        );
+        MyUser user=MyUser(
+            id: credential.user?.uid??'',
+            name: nameEditingController.text,
+            email: emailEditingController.text
+        );
+        FirebaseUtils.addUserToFireStore(user);
+        var userProvider=Provider.of<UserProvider>(context,listen: false);
+        userProvider.changeUser(user);
+        var eventListProvider=Provider.of<EventListProvider>(context,listen: false);
+        eventListProvider.changeToSelectedIndex(0, userProvider.currentUser!.id);
+        DialogMessage.hideLoadingMessage(context: context);
+        DialogMessage.showMessage(
+            context: context,
+            message: AppLocalizations.of(context)!.successfully,
+          posActionName: AppLocalizations.of(context)!.ok,
+          posAction: (){
+            Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.homeRouteName,(route) => false,);
+          }
+        );
+      }
+      // on FirebaseAuthException catch (e) {
+      //   if (e.code == 'weak-password') {
+      //     print('The password provided is too weak.');
+      //   } else if (e.code == 'email-already-in-use') {
+      //     print('The account already exists for that email.');
+      //   }
+      // }
+      catch (e) {
+        DialogMessage.hideLoadingMessage(context: context);
+        DialogMessage.showMessage(context: context,
+          title: AppLocalizations.of(context)!.connection_failed,
+            message: e.toString(),
+          posActionName: AppLocalizations.of(context)!.ok,
+        );
+      }
+
     }
   }
 }

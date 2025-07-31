@@ -1,5 +1,6 @@
 
 import 'package:eventlyapproute/providers/app_theme_provider.dart';
+import 'package:eventlyapproute/providers/user_provider.dart';
 import 'package:eventlyapproute/ui/home/tabs/profile/language/languages_bottom_sheet.dart';
 import 'package:eventlyapproute/ui/home/tabs/profile/theme/theme_bottom_sheet.dart';
 import 'package:eventlyapproute/ui/widgets/custom_elavated_button.dart';
@@ -8,9 +9,11 @@ import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:eventlyapproute/l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/app_languages_provider.dart';
+import '../../../../providers/event_list_provider.dart';
 import '../../../../utils/app_routes.dart';
 class ProfileTabs extends StatefulWidget{
   const ProfileTabs({super.key});
@@ -26,6 +29,7 @@ class _ProfileTabsState extends State<ProfileTabs> {
     var width=MediaQuery.of(context).size.width;
     var languageProvider=Provider.of<AppLanguagesProvider>(context);
     var themeProvider=Provider.of<AppThemeProvider>(context);
+    var userProvider=Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryLight,
@@ -42,8 +46,8 @@ class _ProfileTabsState extends State<ProfileTabs> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('John Safwat',style: AppStyles.bold20White,),
-                  Text('john.route@gmail.com',style: AppStyles.normal16White,),
+                  Text(userProvider.currentUser!.name,style: AppStyles.bold20White,),
+                  Text(userProvider.currentUser!.email,style: AppStyles.normal16White,),
                 ],
               )
             ],
@@ -108,6 +112,10 @@ class _ProfileTabsState extends State<ProfileTabs> {
             Spacer(),
             CustomElavatedButton(onPressed: (){
               Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.loginRouteName, (route) => false,);
+              var eventListProvider=Provider.of<EventListProvider>(context,listen: false);
+              eventListProvider.favouriteList=[];
+              GoogleSignIn googleSignIn=GoogleSignIn();
+              googleSignIn.disconnect();
             },
                 textName: AppLocalizations.of(context)!.logout,
               backgroundColor: AppColors.redColor,
