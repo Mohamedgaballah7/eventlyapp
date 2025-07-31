@@ -13,8 +13,9 @@ import 'package:eventlyapproute/utils/firebase_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:provider/provider.dart';
+
+import '../../../models/user.dart';
 
 class LoginScreen extends StatefulWidget {
    LoginScreen({super.key});
@@ -162,30 +163,75 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
   Future<void> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    DialogMessage.showLoadingMessage(
+        context: context, text: AppLocalizations.of(context)!.loading);
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-    if(googleUser==null){
-      return;
+      if (googleUser == null) {
+        return; // User canceled sign-in
+      }
+
+      // Get auth details
+      final GoogleSignInAuthentication googleAuth = await googleUser
+          .authentication;
+
+      // Create Firebase credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in with Firebase
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+      final user = userCredential.user;
+
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(
+            AppLocalizations.of(context)!.connection_failed,
+            style: AppStyles.bold16White,)),
+        );
+        return;
+      }
+
+      // Read user from Firestore
+      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      var userRead = await FirebaseUtils.readUserFromFireStore(user.uid);
+
+      // If user doesn't exist in Firestore, add them
+      if (userRead == null) {
+        final newUser = MyUser(
+          id: user.uid,
+          name: user.displayName ?? '',
+          email: user.email ?? '',
+        );
+        await FirebaseUtils.addUserToFireStore(newUser);
+        userProvider.changeUser(newUser);
+      } else {
+        userProvider.changeUser(userRead);
+      }
+
+      // Load user’s events
+      var eventListProvider = Provider.of<EventListProvider>(
+          context, listen: false);
+      eventListProvider.changeToSelectedIndex(0, userProvider.currentUser!.id);
+      DialogMessage.hideLoadingMessage(context: context);
+      // Navigate to home screen
+      Navigator.of(context).pushReplacementNamed(AppRoutes.homeRouteName);
+    } catch (e) {
+      DialogMessage.hideLoadingMessage(context: context);
+      DialogMessage.showMessage(
+        context: context,
+        title: AppLocalizations.of(context)!.connection_failed,
+        message: e.toString(),
+        posActionName: AppLocalizations.of(context)!.ok,
+      );
     }
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-    var userProvider=Provider.of<UserProvider>(context,listen: false);
-    var user=await FirebaseUtils.readUserFromFireStore(credential.providerId);
-    userProvider.changeUser(user!);
-    var eventListProvider=Provider.of<EventListProvider>(context,listen: false);
-    eventListProvider.changeToSelectedIndex(0, userProvider.currentUser!.id);
-    eventListProvider.getAllFavouriteFromFireStore(userProvider.currentUser!.id);
-
-    // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).pushReplacementNamed(AppRoutes.homeRouteName);
   }
+
+
   void loginCheck()async{
     if(formKey.currentState!.validate()==true){
       DialogMessage.showLoadingMessage(context: context, text: AppLocalizations.of(context)!.loading);
@@ -212,13 +258,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         );
        }
-      // on FirebaseAuthException catch (e) {
-      //   if (e.code == 'user-not-found') {
-      //     print('No user found for that email.');
-      //   } else if (e.code == 'wrong-password') {
-      //     print('Wrong password provided for that user.');
-      //   }
-      // }
+
       catch (e) {
         DialogMessage.hideLoadingMessage(context: context);
         DialogMessage.showMessage(

@@ -1,4 +1,5 @@
 
+import 'package:eventlyapproute/l10n/app_localizations.dart';
 import 'package:eventlyapproute/providers/app_theme_provider.dart';
 import 'package:eventlyapproute/providers/user_provider.dart';
 import 'package:eventlyapproute/ui/home/tabs/profile/language/languages_bottom_sheet.dart';
@@ -8,7 +9,6 @@ import 'package:eventlyapproute/utils/app_assets.dart';
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:eventlyapproute/l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -43,12 +43,16 @@ class _ProfileTabsState extends State<ProfileTabs> {
             children: [
               Image.asset(AppAssets.RouteLogoProfile),
               SizedBox(width: width*0.025,),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(userProvider.currentUser!.name,style: AppStyles.bold20White,),
-                  Text(userProvider.currentUser!.email,style: AppStyles.normal16White,),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(userProvider.currentUser!.name,
+                      style: AppStyles.bold20White,),
+                    Text(userProvider.currentUser!.email,
+                      style: AppStyles.normal16White,),
+                  ],
+                ),
               )
             ],
           ),
