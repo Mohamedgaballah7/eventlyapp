@@ -1,4 +1,6 @@
 import 'package:eventlyapproute/l10n/app_localizations.dart';
+import 'package:eventlyapproute/providers/event_list_provider.dart';
+import 'package:eventlyapproute/providers/user_provider.dart';
 import 'package:eventlyapproute/ui/widgets/custom_elavated_button.dart';
 import 'package:eventlyapproute/ui/widgets/custom_text_form_field.dart';
 import 'package:eventlyapproute/ui/widgets/switch_toogle_language.dart';
@@ -6,7 +8,13 @@ import 'package:eventlyapproute/utils/app_assets.dart';
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_routes.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
+import 'package:eventlyapproute/utils/dialog_message.dart';
+import 'package:eventlyapproute/utils/firebase_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
    LoginScreen({super.key});
@@ -16,7 +24,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailEditingController=TextEditingController(text:'modys1106@gmaiil.com');
-  TextEditingController passwordEditingController=TextEditingController(text:'4444444');
+  TextEditingController passwordEditingController=TextEditingController(text:'425579');
   final formKey=GlobalKey<FormState>();
   bool obscureText=true;
   @override
@@ -134,7 +142,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         CustomElavatedButton(
-                          onPressed: (){},
+                          onPressed: (){
+                            signInWithGoogle();
+                          },
                           textName: AppLocalizations.of(context)!.login_with_google,
                           textStyle: AppStyles.bold16Primary,
                           backgroundColor: AppColors.transparentColor,
@@ -151,9 +161,74 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  void loginCheck(){
+  Future<void> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    if(googleUser==null){
+      return;
+    }
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    var userProvider=Provider.of<UserProvider>(context,listen: false);
+    var user=await FirebaseUtils.readUserFromFireStore(credential.providerId);
+    userProvider.changeUser(user!);
+    var eventListProvider=Provider.of<EventListProvider>(context,listen: false);
+    eventListProvider.changeToSelectedIndex(0, userProvider.currentUser!.id);
+    eventListProvider.getAllFavouriteFromFireStore(userProvider.currentUser!.id);
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.of(context).pushReplacementNamed(AppRoutes.homeRouteName);
+  }
+  void loginCheck()async{
     if(formKey.currentState!.validate()==true){
-      Navigator.of(context).pushReplacementNamed(AppRoutes.homeRouteName);
+      DialogMessage.showLoadingMessage(context: context, text: AppLocalizations.of(context)!.loading);
+      try {
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailEditingController.text,
+          password: passwordEditingController.text,
+        );
+        var user=await FirebaseUtils.readUserFromFireStore(credential.user?.uid??'');
+        if(user==null){
+          return;
+        }
+        var userProvider=Provider.of<UserProvider>(context,listen: false);
+        userProvider.changeUser(user);
+        var eventListProvider=Provider.of<EventListProvider>(context,listen: false);
+        eventListProvider.changeToSelectedIndex(0, userProvider.currentUser!.id);
+        eventListProvider.getAllFavouriteFromFireStore(userProvider.currentUser!.id);
+        DialogMessage.hideLoadingMessage(context: context);
+        DialogMessage.showMessage(context: context,
+            message: AppLocalizations.of(context)!.successfully,
+          posActionName: AppLocalizations.of(context)!.ok,
+          posAction: (){
+            Navigator.of(context).pushReplacementNamed(AppRoutes.homeRouteName);
+          }
+        );
+       }
+      // on FirebaseAuthException catch (e) {
+      //   if (e.code == 'user-not-found') {
+      //     print('No user found for that email.');
+      //   } else if (e.code == 'wrong-password') {
+      //     print('Wrong password provided for that user.');
+      //   }
+      // }
+      catch (e) {
+        DialogMessage.hideLoadingMessage(context: context);
+        DialogMessage.showMessage(
+          context: context,
+          title: AppLocalizations.of(context)!.connection_failed,
+          message: e.toString(),
+          posActionName: AppLocalizations.of(context)!.ok,
+        );
+      }
+
     }
   }
 }

@@ -162,6 +162,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get please_enter_description => 'يرجى إدخال وصف الحدث';
 
   @override
+  String get please_enter_date => 'يرجى إدخال تاريخ الحدث';
+
+  @override
+  String get please_enter_time => 'يرجى إدخال وقت الحدث';
+
+  @override
   String get event_date => 'تاريخ الحدث';
 
   @override
@@ -181,6 +187,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get add_event => 'أضف الحدث';
+
+  @override
+  String get edit_event => 'تعديل الحدث';
+
+  @override
+  String get update_event => 'حدث الحدث';
+
+  @override
+  String get no_event => 'لا يوجد حدث';
+
+  @override
+  String get event_added_successfully => 'تم اضافه الحدث بنجاح';
+
+  @override
+  String get successfully => 'نجح الاتصال';
+
+  @override
+  String get loading => 'تحميل....';
+
+  @override
+  String get connection_failed => 'فشل الاتصال';
+
+  @override
+  String get ok => 'نعم';
+
+  @override
+  String get favourite_update => 'تم تعديل المفضله بنجاح';
 
   @override
   String get onboardingtitle1 => 'خصّص تجربتك';

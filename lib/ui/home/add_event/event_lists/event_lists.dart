@@ -1,4 +1,3 @@
-import '../../../../l10n/app_localizations.dart';
 import '../../../../utils/app_assets.dart';
 
 class EventList{

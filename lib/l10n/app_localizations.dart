@@ -404,6 +404,18 @@ abstract class AppLocalizations {
   /// **'Please Enter Event Description'**
   String get please_enter_description;
 
+  /// No description provided for @please_enter_date.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Event Date'**
+  String get please_enter_date;
+
+  /// No description provided for @please_enter_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Please Enter Event Time'**
+  String get please_enter_time;
+
   /// No description provided for @event_date.
   ///
   /// In en, this message translates to:
@@ -445,6 +457,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add Event'**
   String get add_event;
+
+  /// No description provided for @edit_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Event'**
+  String get edit_event;
+
+  /// No description provided for @update_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Event'**
+  String get update_event;
+
+  /// No description provided for @no_event.
+  ///
+  /// In en, this message translates to:
+  /// **'No Event Found'**
+  String get no_event;
+
+  /// No description provided for @event_added_successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Added Successfully'**
+  String get event_added_successfully;
+
+  /// No description provided for @successfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Successfully Connection'**
+  String get successfully;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @connection_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection Failed'**
+  String get connection_failed;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'Ok'**
+  String get ok;
+
+  /// No description provided for @favourite_update.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourite Update Successfully'**
+  String get favourite_update;
 
   /// No description provided for @onboardingtitle1.
   ///
