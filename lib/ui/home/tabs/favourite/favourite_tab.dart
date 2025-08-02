@@ -37,9 +37,16 @@ late EventListProvider eventListProvider;
           CustomTextFormField(
             controller: searchEditingController,
             hintName: AppLocalizations.of(context)!.search_for_event,
-            prefixIcon: Icon(Icons.search,color: AppColors.primaryLight,),
+            prefixIcon: Icon(Icons.search, color: AppColors.primaryLight),
             borderColor: AppColors.primaryLight,
             textStyle: AppStyles.medium14Primary,
+            // onChanged: (searchEditingController) async {
+            //   var userProvider = Provider.of<UserProvider>(context, listen: false);
+            //   final results = await eventListProvider.searchEventsByTitle(userProvider.currentUser!.id, searchEditingController.trim());
+            //   setState(() {
+            //     eventListProvider.searchResult = results; // This should be a local list to hold search output
+            //   });
+            // },
           ),
           Expanded(
             child:eventListProvider.favouriteList.isEmpty?
@@ -58,4 +65,5 @@ late EventListProvider eventListProvider;
       ),
     );
   }
+
 }

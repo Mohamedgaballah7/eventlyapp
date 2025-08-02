@@ -1,12 +1,12 @@
-import 'package:eventlyapproute/providers/user_provider.dart';
-import 'package:eventlyapproute/utils/firebase_utils.dart';
 import 'package:eventlyapproute/models/event.dart';
+import 'package:eventlyapproute/providers/user_provider.dart';
 import 'package:eventlyapproute/ui/home/add_event/event_lists/event_lists.dart';
 import 'package:eventlyapproute/ui/home/tabs/home/widgets/events_items.dart';
 import 'package:eventlyapproute/ui/widgets/custom_elavated_button.dart';
 import 'package:eventlyapproute/ui/widgets/custom_text_form_field.dart';
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
+import 'package:eventlyapproute/utils/firebase_utils.dart';
 import 'package:eventlyapproute/utils/snack_bar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -258,6 +258,7 @@ late EventListProvider eventListProvider;
 
       });
       Event event=Event(
+        index: selectedIndex,
           image: selectedImage,
           eventName: selectedEventName,
           title: titleEditingController.text,
