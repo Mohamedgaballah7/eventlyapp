@@ -27,7 +27,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final themeProvider = Provider.of<AppThemeProvider>(context,listen: false);
       setState(() {
-        selectedThemeIndex = themeProvider.appTheme == ThemeMode.light ? 0 : 1;
+        selectedThemeIndex = themeProvider.appTheme == ThemeMode.light ? 1 : 0;
 
       });
     });

@@ -1,13 +1,10 @@
-import 'package:eventlyapproute/providers/user_provider.dart';
-import 'package:eventlyapproute/utils/app_routes.dart';
-import 'package:eventlyapproute/utils/firebase_utils.dart';
 import 'package:eventlyapproute/models/event.dart';
+import 'package:eventlyapproute/providers/user_provider.dart';
 import 'package:eventlyapproute/ui/home/add_event/event_lists/event_lists.dart';
 import 'package:eventlyapproute/ui/widgets/custom_elavated_button.dart';
 import 'package:eventlyapproute/ui/widgets/custom_text_form_field.dart';
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
-import 'package:eventlyapproute/utils/snack_bar_message.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +73,6 @@ class _AddEventScreenState extends State<EditEvent> {
         .width;
     var themeProvider=Provider.of<AppThemeProvider>(context);
     eventListProvider=Provider.of<EventListProvider>(context);
-    var userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -270,7 +266,8 @@ class _AddEventScreenState extends State<EditEvent> {
     var userProvider = Provider.of<UserProvider>(context, listen: false);
 
     Event updatedEvent = Event(
-      id: args.id, // ✅ FIX: add this line
+      id: args.id,
+      index: selectedIndex,
       image: args.image,
       eventName: args.eventName,
       title: titleEditingController.text,

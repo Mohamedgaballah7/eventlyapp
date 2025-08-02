@@ -4,9 +4,9 @@ import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/snack_bar_message.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/firebase_utils.dart';
 import '../l10n/app_localizations.dart';
 import '../models/event.dart';
+import '../utils/firebase_utils.dart';
 
 class EventListProvider extends ChangeNotifier{
   int selectedIndex=0;
@@ -14,6 +14,7 @@ class EventListProvider extends ChangeNotifier{
   List<Event>filterEventList=[];
   List<String>eventsNameList=[];
   List<Event>favouriteList=[];
+  List<Event>searchResult = [];
   List<String> getEventsNameList(BuildContext context){
     return eventsNameList=[
       AppLocalizations.of(context)!.all,
@@ -42,7 +43,7 @@ class EventListProvider extends ChangeNotifier{
   }
   void getFilterEventsFromFireStore(String id)async{
     var querySnapshot=await FirebaseUtils.getEventsCollection(id)
-        .where('eventName',isEqualTo:eventsNameList[selectedIndex] ).get();
+        .where('index', isEqualTo: selectedIndex - 1).get();
     filterEventList=querySnapshot.docs.map((doc) {
       return doc.data();
     },).toList();
@@ -108,26 +109,44 @@ class EventListProvider extends ChangeNotifier{
       );
 
     }
-  void updateEventFromFireStore(Event event,BuildContext context,String uId){
+
+  Future<void> updateEventFromFireStore(Event event, BuildContext context,
+      String uId) async {
     FirebaseUtils.getEventsCollection(uId).doc(event.id).update({
       'image': event.image,
       'eventName': event.eventName,
       'title': event.title,
       'description': event.description,
-      'dateTime': event.dateTime,
+      'dateTime': event.dateTime.millisecondsSinceEpoch,
       'time': event.time,
     })
-        .then((value)  {
+        .then((value) async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.update_event,
           style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: AppColors.whiteColor),
           textAlign: TextAlign.center,)
         ,backgroundColor: AppColors.greenColor,
       ));
+      Navigator.of(context).pop();
       //Changeindex(0, uId);
-       selectedIndex == 0 ? getAllEvents(uId) : getFilterEventsFromFireStore(uId);
+      await selectedIndex == 0
+          ? getAllEvents(uId)
+          : getFilterEventsFromFireStore(uId);
     },);
     notifyListeners();
   }
+// Future<List<Event>> searchEventsByTitle(String userId, String searchTerm) async {
+//   final collection = FirebaseFirestore.instance
+//       .collection('users')
+//       .doc(userId)
+//       .collection('events');
+//
+//   final snapshot = await collection
+//       .where('title', isEqualTo: searchTerm)
+//       .get();
+//   notifyListeners();
+//   return searchResult= snapshot.docs.map((doc) => Event.fromFireStore(doc.data())).toList();
+// }
+
 }
 

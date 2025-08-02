@@ -1,9 +1,6 @@
 import 'package:eventlyapproute/utils/app_colors.dart';
 import 'package:eventlyapproute/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../providers/app_theme_provider.dart';
 typedef OnValidator=String? Function(String?)?;
 class CustomTextFormField extends StatelessWidget {
   Color? borderColor;
@@ -12,6 +9,7 @@ class CustomTextFormField extends StatelessWidget {
   Widget? prefixIcon;
   Widget? suffixIcon;
   OnValidator validator;
+  final Function(String)? onChanged;
   TextEditingController controller;
   bool obscureText;
   TextInputType keyboardType;
@@ -26,6 +24,7 @@ class CustomTextFormField extends StatelessWidget {
     this.suffixIcon,
     required this.controller,
     this.validator,
+    this.onChanged,
     this.obscureText=false,
     this.keyboardType=TextInputType.text,
     this.obscuringCharacter='.',
@@ -75,7 +74,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
         controller: controller,
         validator: validator,
-
+        onChanged: onChanged,
         keyboardType: keyboardType,
         obscuringCharacter: obscuringCharacter,
         maxLines: maxLines??1,

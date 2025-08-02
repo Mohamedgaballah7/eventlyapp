@@ -23,6 +23,8 @@ Event event;
       onTap: (){
         Navigator.of(context).pushNamed(AppRoutes.editEventRouteName,
             arguments: Event(
+                id: event.id,
+                index: eventListProvider.selectedIndex,
                 image: event.image,
                 eventName: event.eventName,
                 title: event.title,

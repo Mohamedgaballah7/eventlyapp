@@ -1,5 +1,6 @@
 class Event{
   static const String collectionName='Events';
+  int index;
   String id;
   String image;
   String eventName;
@@ -10,6 +11,7 @@ class Event{
   bool isFavourite;
   Event({
     this.id='',
+    required this.index,
     required this.image,
     required this.eventName,
     required this.title,
@@ -20,6 +22,7 @@ class Event{
 });
   Event.fromFireStore(Map<String,dynamic>data):this(
     id: data['id'],
+    index: data['index'] ?? 0,
     image: data['image'],
     eventName: data['eventName'],
     title: data['title'],
@@ -31,6 +34,7 @@ class Event{
   Map<String,dynamic>toFireStore(){
     return {
       'id':id,
+      'index': index,
       'image':image,
       'eventName':eventName,
       'title':title,
